@@ -30,4 +30,26 @@ describe("Block", () => {
       expect(genesisBlock).toEqual(GENESIS_DATA);
     });
   });
+
+  describe("Mining Block in Blockchain", () => {
+    const lastBlock = Block.genesis();
+    const data = "Data Mined";
+    const minedBlock = Block.mineBlock({
+      lastBlock,
+      data
+    });
+    it("Returns a mined Block", () => {
+      expect(minedBlock instanceof Block).toBe(true);
+    });
+
+    it("Has to check if `lastHash` equal to the `hash` of previous Block", () => {
+      expect(minedBlock.lastHash).toEqual(lastBlock.hash);
+    });
+    it("Has to check if data of mined Block equals to data", () => {
+      expect(minedBlock.data).toEqual(data);
+    });
+    it("Has to check if Block has timestamp", () => {
+      expect(minedBlock.timestamp).not.toEqual(undefined);
+    });
+  });
 });
