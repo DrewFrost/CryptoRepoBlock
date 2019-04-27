@@ -17,7 +17,7 @@ class Blockchain {
     this.chain.push(newBlock);
   }
 
-  isChainValid(chain) {
+  static isChainValid(chain) {
     //Validate genesis block
     if (JSON.stringify(chain[0]) !== JSON.stringify(Block.generateGenesis())) {
       return false;
@@ -40,6 +40,18 @@ class Blockchain {
       }
     }
     return true;
+  }
+
+  alterChain(chain) {
+    if (chain.length <= this.chain.length) {
+      return;
+    }
+
+    if (!Blockchain.isChainValid(chain)) {
+      return;
+    }
+
+    this.chain = chain;
   }
 }
 

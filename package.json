@@ -1,14 +1,24 @@
 {
   "name": "coursework",
   "version": "1.0.0",
-  "description": "Own Blockchain & Crypto & Wallet for course work",
+  "description": "Course work in NaUKMA",
   "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "test": "jest --watchAll"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrewFrost/CryptoRepoBlock.git"
+  },
   "author": "Moroz Andrii",
   "license": "ISC",
-  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/DrewFrost/CryptoRepoBlock/issues"
+  },
+  "homepage": "https://github.com/DrewFrost/CryptoRepoBlock#readme",
   "devDependencies": {
     "jest": "^24.7.1"
   }
