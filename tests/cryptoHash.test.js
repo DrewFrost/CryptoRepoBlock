@@ -1,6 +1,6 @@
-const cryptoHash = require("./cryptoHash");
+const cryptoHash = require("../app/cryptoHash");
 
-describe("Crypto Hash Function", () => {
+describe("cryptoHash()", () => {
   it("Has to generate SHA-256 output", () => {
     expect(cryptoHash("testinghashtext")).toEqual(
       "86cd031fd8dc598e01ec5931965fdce8803e46487c7a2b5450cdfd5fe97c1658"

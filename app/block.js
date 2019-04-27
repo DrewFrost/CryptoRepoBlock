@@ -1,5 +1,5 @@
 const cryptoHash = require("./cryptoHash");
-const { GENESIS_DATA } = require("./config");
+const { GENESIS_BLOCK_DATA } = require("../config/config");
 
 // Basic Block Structure
 class Block {
@@ -12,8 +12,8 @@ class Block {
 
   // Static methods to create
   // instance of a class without using contructor
-  static genesis() {
-    return new this(GENESIS_DATA);
+  static generateGenesis() {
+    return new this(GENESIS_BLOCK_DATA);
   }
 
   static mineBlock({ lastBlock, data }) {

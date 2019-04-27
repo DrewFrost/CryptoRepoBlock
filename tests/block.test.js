@@ -1,6 +1,6 @@
-const Block = require("./block.js");
-const cryptoHash = require("./cryptoHash");
-const { GENESIS_DATA } = require("./config");
+const Block = require("../app/block");
+const cryptoHash = require("../app/cryptoHash");
+const { GENESIS_BLOCK_DATA } = require("../config/config");
 
 describe("Block", () => {
   const timestamp = "date-block";
@@ -21,19 +21,19 @@ describe("Block", () => {
   });
 
   describe("Genesis Function of Blockchain", () => {
-    const genesisBlock = Block.genesis();
+    const genesisBlock = Block.generateGenesis();
 
     it("Has to return instance of block", () => {
       expect(genesisBlock instanceof Block).toBe(true);
     });
 
     it("Has to return data from genesis block", () => {
-      expect(genesisBlock).toEqual(GENESIS_DATA);
+      expect(genesisBlock).toEqual(GENESIS_BLOCK_DATA);
     });
   });
 
   describe("Mining Block in Blockchain", () => {
-    const lastBlock = Block.genesis();
+    const lastBlock = Block.generateGenesis();
     const data = "Data Mined";
     const minedBlock = Block.mineBlock({
       lastBlock,
