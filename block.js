@@ -1,3 +1,4 @@
+const cryptoHash = require("./cryptoHash");
 const { GENESIS_DATA } = require("./config");
 
 // Basic Block Structure
@@ -16,10 +17,13 @@ class Block {
   }
 
   static mineBlock({ lastBlock, data }) {
+    const timestamp = Date.now();
+    const lastHash = lastBlock.hash;
     return new this({
-      timestamp: Date.now(),
-      lastHash: lastBlock.hash,
-      data
+      timestamp,
+      lastHash,
+      data,
+      hash: cryptoHash(timestamp, lastHash, data)
     });
   }
 }
