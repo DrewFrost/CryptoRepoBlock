@@ -1,0 +1,15 @@
+{
+  "name": "coursework",
+  "version": "1.0.0",
+  "description": "Own Blockchain & Crypto & Wallet for course work",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "author": "Moroz Andrii",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.7.1"
+  }
+}
