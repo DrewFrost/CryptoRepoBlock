@@ -74,6 +74,13 @@ describe("Block", () => {
         "0".repeat(minedBlock.difficulty)
       );
     });
+    it("Has to regulate difficulty", () => {
+      const potentialResults = [
+        lastBlock.difficulty + 1,
+        lastBlock.difficulty - 1
+      ];
+      expect(potentialResults.includes(minedBlock.difficulty)).toBe(true);
+    });
   });
 
   describe("regulateDifficulty()", () => {
@@ -92,6 +99,11 @@ describe("Block", () => {
           timestamp: block.timestamp + MINE_RATE + 100
         })
       ).toEqual(block.difficulty - 1);
+    });
+    it("Has to check that difficulty can't go lower than 1", () => {
+      block.difficulty = -1;
+
+      expect(Block.regulateDifficulty({ originalBlock: block })).toEqual(1);
     });
   });
 });
