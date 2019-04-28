@@ -1,9 +1,9 @@
 const Block = require("../app/block");
 const cryptoHash = require("../app/cryptoHash");
-const { GENESIS_BLOCK_DATA } = require("../config/config");
+const { GENESIS_BLOCK_DATA, MINE_RATE } = require("../config/config");
 
 describe("Block", () => {
-  const timestamp = "date-block";
+  const timestamp = 2000;
   const lastHash = "date-block-hash";
   const hash = "this-block-hash";
   const nonce = 1;
@@ -26,7 +26,7 @@ describe("Block", () => {
     expect(block.difficulty).toEqual(difficulty);
   });
 
-  describe("Genesis Function of Blockchain", () => {
+  describe("generateGenesis()", () => {
     const genesisBlock = Block.generateGenesis();
 
     it("Has to return instance of block", () => {
@@ -38,7 +38,7 @@ describe("Block", () => {
     });
   });
 
-  describe("Mining Block in Blockchain", () => {
+  describe("mineBlock()", () => {
     const lastBlock = Block.generateGenesis();
     const data = "Data Mined";
     const minedBlock = Block.mineBlock({
@@ -69,10 +69,29 @@ describe("Block", () => {
         )
       );
     });
-    it("Has to set the hash that is mathces difficulty", () => {
+    it("Has to set the hash that is matches difficulty", () => {
       expect(minedBlock.hash.substring(0, minedBlock.difficulty)).toEqual(
         "0".repeat(minedBlock.difficulty)
       );
+    });
+  });
+
+  describe("regulateDifficulty()", () => {
+    it("Has to raise difficulty if mine rate is too quick", () => {
+      expect(
+        Block.regulateDifficulty({
+          originalBlock: block,
+          timestamp: block.timestamp + MINE_RATE - 100
+        })
+      ).toEqual(block.difficulty + 1);
+    });
+    it("Has to lower difficulty if mine rate is too slow", () => {
+      expect(
+        Block.regulateDifficulty({
+          originalBlock: block,
+          timestamp: block.timestamp + MINE_RATE + 100
+        })
+      ).toEqual(block.difficulty - 1);
     });
   });
 });
