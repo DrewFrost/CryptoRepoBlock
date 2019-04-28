@@ -11,9 +11,7 @@ class PubSub {
     this.publisher = redis.createClient();
     this.subscriber = redis.createClient();
 
-    this.subscriber.subscribe(CHANNELS.TEST);
-    this.subscriber.subscribe(CHANNELS.BLOCKCHAIN);
-
+    this.subToChannels();
     this.subscriber.on("message", (channel, message) =>
       this.manageMessage(channel, message)
     );
@@ -28,8 +26,18 @@ class PubSub {
       this.blockchain.alterChain(parsedMessage);
     }
   }
+
+  subToChannels() {
+    Object.values(CHANNELS).forEach(channel => {
+      this.subscriber.subscribe(channel);
+    });
+  }
   publish({ channel, message }) {
-    this.publisher.publish(channel, message);
+    this.subscriber.unsubscribe(channel, () => {
+      this.publisher.publish(channel, message, () => {
+        this.subscriber.subscribe(channel);
+      });
+    });
   }
   //Transmiting chain to all other peers
   transmitChain() {
