@@ -18,7 +18,7 @@ class PubSub {
       this.manageMessage(channel, message)
     );
   }
-
+  // Managing messages of network
   manageMessage(channel, message) {
     console.log(`Message received. Channel: ${channel}. Message: ${message}.`);
 
@@ -31,6 +31,7 @@ class PubSub {
   publish({ channel, message }) {
     this.publisher.publish(channel, message);
   }
+  //Transmiting chain to all other peers
   transmitChain() {
     this.publish({
       channel: CHANNELS.BLOCKCHAIN,
