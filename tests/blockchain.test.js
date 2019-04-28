@@ -1,5 +1,6 @@
 const Blockchain = require("../app/blockchain");
 const Block = require("../app/block");
+const cryptoHash = require("../utils/cryptoHash");
 
 describe("Blockchain", () => {
   let blockchain, newChain, originalChain;
@@ -49,6 +50,29 @@ describe("Blockchain", () => {
           blockchain.addBlock({ data: "testing data 4" });
           blockchain.addBlock({ data: "testing data 5" });
           blockchain.chain[3].data = "someone changed data in blockchain";
+          expect(Blockchain.isChainValid(blockchain.chain)).toBe(false);
+        });
+      });
+
+      describe("When block in the chain has jumped difficulty", () => {
+        it("Has to return false", () => {
+          const lastBlock = blockchain.chain[blockchain.chain.length - 1];
+          const lastHash = lastBlock.hash;
+          const timestamp = Date.now();
+          const nonce = 0;
+          const data = [];
+          const difficulty = lastBlock.difficulty - 3;
+          const hash = cryptoHash(lastHash, timestamp, nonce, data, difficulty);
+          const jumpedBlock = new Block({
+            lastHash,
+            timestamp,
+            hash,
+            nonce,
+            difficulty,
+            data
+          });
+          blockchain.chain.push(jumpedBlock);
+
           expect(Blockchain.isChainValid(blockchain.chain)).toBe(false);
         });
       });

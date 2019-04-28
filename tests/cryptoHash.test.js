@@ -1,4 +1,4 @@
-const cryptoHash = require("../app/cryptoHash");
+const cryptoHash = require("../utils/cryptoHash");
 const hexToBinara = require("hex-to-binary");
 
 describe("cryptoHash()", () => {

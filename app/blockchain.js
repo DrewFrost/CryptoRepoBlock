@@ -1,5 +1,5 @@
 const Block = require("./block.js");
-const cryptoHash = require("./cryptoHash");
+const cryptoHash = require("../utils/cryptoHash");
 
 class Blockchain {
   // Initializing the chain with genesis block alread in chain
@@ -25,9 +25,9 @@ class Blockchain {
     //Validate all other blocks of chain
     for (let i = 1; i < chain.length; i++) {
       const { timestamp, lastHash, hash, nonce, difficulty, data } = chain[i];
-
+      const lastBlockDifficulty = chain[i - 1].difficulty;
       const previousBlockHash = chain[i - 1].hash;
-
+      // Check if previous block hash equals to current block last hash
       if (lastHash !== previousBlockHash) {
         return false;
       }
@@ -38,8 +38,12 @@ class Blockchain {
         nonce,
         difficulty
       );
-
+      // Check if current block hash is valid
       if (hash !== validHash) {
+        return false;
+      }
+      // Check for difficulty not to jump more than 1
+      if (Math.abs(lastBlockDifficulty - difficulty > 1)) {
         return false;
       }
     }
