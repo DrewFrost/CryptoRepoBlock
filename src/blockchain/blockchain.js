@@ -1,5 +1,5 @@
 const Block = require("./block.js");
-const cryptoHash = require("../utils/cryptoHash");
+const cryptoHash = require("../../utils/cryptoHash");
 
 class Blockchain {
   // Initializing the chain with genesis block alread in chain
