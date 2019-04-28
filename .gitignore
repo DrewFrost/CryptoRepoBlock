@@ -3,6 +3,8 @@
 .DS_Store
 .vscode
 
+#Redis
+*.rdb
 # Logs
 logs
 *.log
