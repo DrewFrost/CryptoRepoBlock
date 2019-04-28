@@ -62,7 +62,7 @@ class Blockchain {
     }
 
     this.chain = chain;
-    console.log("Chain was altered");
+    console.log("Chain was replaced");
   }
 }
 
