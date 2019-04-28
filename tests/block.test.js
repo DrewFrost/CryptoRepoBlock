@@ -6,18 +6,24 @@ describe("Block", () => {
   const timestamp = "date-block";
   const lastHash = "date-block-hash";
   const hash = "this-block-hash";
+  const nonce = 1;
+  const difficulty = 1;
   const data = ["this", "is", "data", "for", "testing"];
   const block = new Block({
     timestamp,
     lastHash,
     hash,
-    data
+    data,
+    nonce,
+    difficulty
   });
   it("Checks if block has all of properties", () => {
     expect(block.timestamp).toEqual(timestamp);
     expect(block.lastHash).toEqual(lastHash);
     expect(block.hash).toEqual(hash);
     expect(block.data).toEqual(data);
+    expect(block.nonce).toEqual(nonce);
+    expect(block.difficulty).toEqual(difficulty);
   });
 
   describe("Genesis Function of Blockchain", () => {
@@ -54,7 +60,18 @@ describe("Block", () => {
     });
     it("Has to create SHA-256 `hash` from inputs", () => {
       expect(minedBlock.hash).toEqual(
-        cryptoHash(minedBlock.timestamp, lastBlock.hash, data)
+        cryptoHash(
+          minedBlock.timestamp,
+          minedBlock.nonce,
+          minedBlock.difficulty,
+          lastBlock.hash,
+          data
+        )
+      );
+    });
+    it("Has to set the hash that is mathces difficulty", () => {
+      expect(minedBlock.hash.substring(0, minedBlock.difficulty)).toEqual(
+        "0".repeat(minedBlock.difficulty)
       );
     });
   });

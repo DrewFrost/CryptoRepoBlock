@@ -64,15 +64,27 @@ describe("Blockchain", () => {
       });
     });
   });
+
   describe("alterChain()", () => {
+    let logMock, errorMock;
+
+    beforeEach(() => {
+      logMock = jest.fn();
+      errorMock = jest.fn();
+
+      global.console.log = logMock;
+      global.console.error = errorMock;
+    });
     describe("When new chain isn't longer than old chain", () => {
       beforeEach(() => {
         newChain.chain[0] = { new: "chain" };
-
         blockchain.alterChain(newChain.chain);
       });
       it("Musn't alter the chain", () => {
         expect(blockchain.chain).toEqual(originalChain);
+      });
+      it("Has to log an error", () => {
+        expect(errorMock).toHaveBeenCalled();
       });
     });
 
@@ -93,10 +105,20 @@ describe("Blockchain", () => {
         it("Musn't alter the chain", () => {
           expect(blockchain.chain).toEqual(originalChain);
         });
+        it("Has to log an error", () => {
+          expect(errorMock).toHaveBeenCalled();
+        });
       });
       describe("Chain is valid", () => {
+        beforeEach(() => {
+          blockchain.alterChain(newChain.chain);
+        });
+
         it("Must alter the chain", () => {
-          expect(blockchain.chain).toEqual(originalChain);
+          expect(blockchain.chain).toEqual(newChain.chain);
+        });
+        it("Has to log about altering chain", () => {
+          expect(logMock).toHaveBeenCalled();
         });
       });
     });

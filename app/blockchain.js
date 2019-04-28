@@ -24,16 +24,20 @@ class Blockchain {
     }
     //Validate all other blocks of chain
     for (let i = 1; i < chain.length; i++) {
-      const block = chain[i];
+      const { timestamp, lastHash, hash, nonce, difficulty, data } = chain[i];
 
       const previousBlockHash = chain[i - 1].hash;
-
-      const { timestamp, lastHash, hash, data } = block;
 
       if (lastHash !== previousBlockHash) {
         return false;
       }
-      const validHash = cryptoHash(timestamp, lastHash, data);
+      const validHash = cryptoHash(
+        timestamp,
+        lastHash,
+        data,
+        nonce,
+        difficulty
+      );
 
       if (hash !== validHash) {
         return false;
@@ -44,14 +48,17 @@ class Blockchain {
 
   alterChain(chain) {
     if (chain.length <= this.chain.length) {
+      console.error("New chain must be longer");
       return;
     }
 
     if (!Blockchain.isChainValid(chain)) {
+      console.error("New chain must be valid");
       return;
     }
 
     this.chain = chain;
+    console.log("Chain was altered");
   }
 }
 
