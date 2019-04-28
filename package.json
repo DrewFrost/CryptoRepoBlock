@@ -21,5 +21,8 @@
   "homepage": "https://github.com/DrewFrost/CryptoRepoBlock#readme",
   "devDependencies": {
     "jest": "^24.7.1"
+  },
+  "dependencies": {
+    "hex-to-binary": "^1.0.1"
   }
 }

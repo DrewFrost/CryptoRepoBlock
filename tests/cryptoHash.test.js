@@ -1,4 +1,5 @@
 const cryptoHash = require("../app/cryptoHash");
+const hexToBinara = require("hex-to-binary");
 
 describe("cryptoHash()", () => {
   it("Has to generate SHA-256 output", () => {

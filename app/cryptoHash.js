@@ -6,6 +6,7 @@ const cryptoHash = (...inputs) => {
 
   hash.update(inputs.sort().join(" "));
   // Return digest of hash function in chosen encoding
+
   return hash.digest("hex");
 };
 
