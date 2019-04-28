@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +22,11 @@
   },
   "homepage": "https://github.com/DrewFrost/CryptoRepoBlock#readme",
   "devDependencies": {
-    "jest": "^24.7.1"
+    "jest": "^24.7.1",
+    "nodemon": "^1.18.11"
   },
   "dependencies": {
+    "express": "^4.16.4",
     "hex-to-binary": "^1.0.1"
   }
 }
