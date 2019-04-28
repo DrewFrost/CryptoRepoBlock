@@ -1,6 +1,8 @@
 const Transaction = require("../src/wallet/transaction");
 const Wallet = require("../src/wallet/wallet");
-const { verifySignature } = require("../utils/ec");
+const {
+  verifySignature
+} = require("../utils/ec");
 describe("Transaction", () => {
   let transaction, senderWallet, receiver, amount;
 
@@ -8,8 +10,11 @@ describe("Transaction", () => {
     senderWallet = new Wallet();
     receiver = "publicKeyreceiver";
     amount = 50;
-
-    transaction = new Transaction({ senderWallet, receiver, amount });
+    transaction = new Transaction({
+      senderWallet,
+      receiver,
+      amount
+    });
   });
 
   it("should have an id", () => {
@@ -56,6 +61,36 @@ describe("Transaction", () => {
           signature: transaction.input.signature
         })
       ).toBe(true);
+    });
+  });
+
+  describe("validateTransaction", () => {
+    let errorMsg;
+    beforeEach(() => {
+      errorMsg = jest.fn();
+
+      global.console.error = errorMsg;
+    });
+    describe("transaction is valid", () => {
+      it("should return true", () => {
+        expect(Transaction.validateTransaction(transaction)).toBe(true);
+      });
+    });
+    describe("transaction is invalid", () => {
+      describe("transaction outputMap is invalid", () => {
+        it("should return false", () => {
+          transaction.outputMap[senderWallet.publicKey] = 10000000000;
+          expect(Transaction.validateTransaction(transaction)).toBe(false);
+          expect(errorMsg).toHaveBeenCalled();
+        });
+      });
+      describe("transaction signature is fake", () => {
+        it("should return false", () => {
+          transaction.input.signature = new Wallet().sign("fakesignature");
+          expect(Transaction.validateTransaction(transaction)).toBe(false);
+          expect(errorMsg).toHaveBeenCalled();
+        });
+      });
     });
   });
 });
