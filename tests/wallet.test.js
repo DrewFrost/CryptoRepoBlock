@@ -12,7 +12,7 @@ describe("Wallet", () => {
     expect(wallet).toHaveProperty("balance");
   });
   it("should have a public key", () => {
-    console.log(wallet.publicKey);
+    expect(wallet).toHaveProperty("publicKey");
   });
 
   describe("Has to sign data", () => {
