@@ -1,5 +1,8 @@
 const Block = require("./block.js");
+const Transaction = require("../wallet/transaction");
+const Wallet = require("../wallet/wallet");
 const cryptoHash = require("../../utils/cryptoHash");
+const { REWARD_INPUT, MINING_REWARD } = require("../../config/config");
 
 class Blockchain {
   // Initializing the chain with genesis block alread in chain
@@ -15,6 +18,68 @@ class Blockchain {
     });
 
     this.chain.push(newBlock);
+  }
+  alterChain(chain, validateTransactions, onSuccess) {
+    if (chain.length <= this.chain.length) {
+      console.error("New chain must be longer");
+      return;
+    }
+
+    if (!Blockchain.isChainValid(chain)) {
+      console.error("New chain must be valid");
+      return;
+    }
+    if (validateTransactions && !this.validTransactionData({ chain })) {
+      console.error("New chain has invalid data");
+      return;
+    }
+    if (onSuccess) onSuccess();
+    this.chain = chain;
+    console.log("Chain was replaced");
+  }
+  validTransactionData({ chain }) {
+    for (let i = 1; i < chain.length; i++) {
+      const block = chain[i];
+      const transactionSet = new Set();
+
+      let rewardTransactionCount = 0;
+      for (let transaction of block.data) {
+        //Check for miner to have only one reward
+        if (transaction.input.address === REWARD_INPUT.address) {
+          rewardTransactionCount += 1;
+          if (rewardTransactionCount > 1) {
+            console.error("You can't get more than one reward");
+            return false;
+          }
+          //Check if miner receives right, hardcoded amount
+          if (Object.values(transaction.outputMap)[0] !== MINING_REWARD) {
+            console.error("Miner reward amount is invalid");
+            return false;
+          }
+        } else {
+          if (!Transaction.validateTransaction(transaction)) {
+            console.error("Transaction is invalid");
+            return false;
+          }
+          const realBalance = Wallet.calculateBalance({
+            chain: this.chain,
+            address: transaction.input.address
+          });
+          //Check of someone tries to fake their wallet balance on transaction
+          if (transaction.input.amount !== realBalance) {
+            console.error("Invalid amount");
+            return false;
+          }
+          if (transactionSet.has(transaction)) {
+            console.error("There are identical transactions in block");
+            return false;
+          } else {
+            transactionSet.add(transaction);
+          }
+        }
+      }
+    }
+    return true;
   }
 
   static isChainValid(chain) {
@@ -48,21 +113,6 @@ class Blockchain {
       }
     }
     return true;
-  }
-
-  alterChain(chain, onSuccess) {
-    if (chain.length <= this.chain.length) {
-      console.error("New chain must be longer");
-      return;
-    }
-
-    if (!Blockchain.isChainValid(chain)) {
-      console.error("New chain must be valid");
-      return;
-    }
-    if (onSuccess) onSuccess();
-    this.chain = chain;
-    console.log("Chain was replaced");
   }
 }
 
