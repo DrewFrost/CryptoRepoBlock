@@ -110,6 +110,57 @@ const syncWithNetwork = () => {
   );
 };
 
+const testWallet1 = new Wallet();
+const testWallet2 = new Wallet();
+
+const generateWalletTransaction = ({ wallet, receiver, amount }) => {
+  const transaction = wallet.createTransaction({
+    receiver,
+    amount,
+    chain: blockchain.chain
+  });
+
+  transactionPool.setTransaction(transaction);
+};
+
+const walletAction = () =>
+  generateWalletTransaction({
+    wallet,
+    receiver: testWallet1.publicKey,
+    amount: 30
+  });
+
+const testWallet1Action = () =>
+  generateWalletTransaction({
+    wallet: testWallet1,
+    receiver: testWallet2,
+    amount: 20
+  });
+
+const testWallet2Action = () => {
+  generateWalletTransaction({
+    wallet: testWallet2,
+    receiver: wallet.publicKey,
+    amount: 15
+  });
+};
+
+for (let i = 0; i < 10; i++) {
+  if (i % 3 === 0) {
+    walletAction();
+    testWallet1Action();
+  } else if (i % 3 === 1) {
+    walletAction();
+    testWallet2Action();
+  }else{
+    testWallet1Action();
+    testWallet2Action();
+  }
+  miner.mineTransactions();
+}
+
+
+
 let PEER_PORT;
 //Creating new peeers
 if (process.env.GENERATE_PEER_PORT === "true") {
