@@ -2,6 +2,7 @@ const uuid = require("uuid/v1");
 const { verifySignature } = require("../../utils/ec");
 const { REWARD_INPUT, MINING_REWARD } = require("../../config/config");
 
+//Records of exchange of currency inside blockchain
 class Transaction {
   constructor({ senderWallet, receiver, amount, outputMap, input }) {
     this.id = uuid();
@@ -10,15 +11,18 @@ class Transaction {
     this.input =
       input || this.createInput({ senderWallet, outputMap: this.outputMap });
   }
-
+  //Output contains information that is used in transaction
   createOutputMap({ senderWallet, receiver, amount }) {
     const outputMap = {};
 
     outputMap[receiver] = amount;
+    //records current balance of sender
     outputMap[senderWallet.publicKey] = senderWallet.balance - amount;
 
     return outputMap;
   }
+
+  //Input contains signature from sender
   createInput({ senderWallet, outputMap }) {
     return {
       timestamp: Date.now(),

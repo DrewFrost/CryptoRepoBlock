@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 
-// Cryptographic hash function for inputs
+// Cryptographic hash function for any number inputs
+// sort them stringify inputs and and creates unique hash
 const cryptoHash = (...inputs) => {
   const hash = crypto.createHash("sha256");
   //Mapping through input and strigify all of items inside

@@ -1,11 +1,14 @@
 const redis = require("redis");
 
 const CHANNELS = {
+  //TEST is unused was only for testing purposes
   TEST: "TEST",
   BLOCKCHAIN: "BLOCKCHAIN",
   TRANSACTION: "TRANSACTION"
 };
 
+//Pubsub pattern is used to implement decentralized connection where publisher
+// can send messages to subscribers and subcribers receives messages
 class PubSub {
   constructor({ blockchain, transactionPool }) {
     this.blockchain = blockchain;
@@ -25,6 +28,8 @@ class PubSub {
 
     const parsedMessage = JSON.parse(message);
     switch (channel) {
+      //Switch case makes it easy to add new channels
+      //and use channells depending on operation done
       case CHANNELS.BLOCKCHAIN:
         this.blockchain.alterChain(parsedMessage, true, () => {
           this.transactionPool.clearBlockchainTransactions({
@@ -39,7 +44,8 @@ class PubSub {
         return;
     }
   }
-
+  //Automaticaly subscribe subscribers to all existing chanells
+  // so it is easy to add new channels
   subToChannels() {
     Object.values(CHANNELS).forEach(channel => {
       this.subscriber.subscribe(channel);

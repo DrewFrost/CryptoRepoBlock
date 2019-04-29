@@ -4,6 +4,7 @@ const Wallet = require("../wallet/wallet");
 const cryptoHash = require("../../utils/cryptoHash");
 const { REWARD_INPUT, MINING_REWARD } = require("../../config/config");
 
+//Collects out blocks in chain
 class Blockchain {
   // Initializing the chain with genesis block alread in chain
   constructor() {
@@ -19,6 +20,7 @@ class Blockchain {
 
     this.chain.push(newBlock);
   }
+  //Checks if new chain is longer and valid and alters chain in blockchain
   alterChain(chain, validateTransactions, onSuccess) {
     if (chain.length <= this.chain.length) {
       console.error("New chain must be longer");
@@ -37,6 +39,7 @@ class Blockchain {
     this.chain = chain;
     console.log("Chain was replaced");
   }
+  //Forms rules of cryptocurrency
   validTransactionData({ chain }) {
     for (let i = 1; i < chain.length; i++) {
       const block = chain[i];
@@ -70,6 +73,7 @@ class Blockchain {
             console.error("Invalid amount");
             return false;
           }
+          //Checks for duplicating transactions in the block
           if (transactionSet.has(transaction)) {
             console.error("There are identical transactions in block");
             return false;

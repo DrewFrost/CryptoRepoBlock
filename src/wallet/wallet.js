@@ -3,14 +3,19 @@ const { STARTING_BALANCE } = require("../../config/config");
 const cryptoHash = require("../../utils/cryptoHash");
 const { ec } = require("../../utils/ec");
 
+// Wallet alows users to interact with each other
+//
 class Wallet {
   constructor() {
     this.balance = STARTING_BALANCE;
+    //Holds private and public key
     this.keyPair = ec.genKeyPair();
+    //Public key allows other users to interact with you
     this.publicKey = this.keyPair.getPublic().encode("hex");
   }
 
   sign(data) {
+    //Private key is used to sign data
     return this.keyPair.sign(cryptoHash(data));
   }
   createTransaction({ receiver, amount, chain }) {
@@ -26,6 +31,7 @@ class Wallet {
     return new Transaction({ senderWallet: this, receiver, amount });
   }
 
+  //Calculates balance of wallet from output amount of recent transactions
   static calculateBalance({ chain, address }) {
     let hasTransmitedTransaction = false;
     let outputsTotal = 0;

@@ -1,5 +1,6 @@
 const Transaction = require("./transaction");
 
+//Sets transactions, updates existing transactions and replaces transaction map
 class TransactionPool {
   constructor() {
     this.transactionMap = {};
