@@ -62,7 +62,7 @@ describe("Transaction", () => {
     });
   });
 
-  describe("validateTransaction", () => {
+  describe("validateTransaction()", () => {
     let errorMsg;
     beforeEach(() => {
       errorMsg = jest.fn();
@@ -89,6 +89,39 @@ describe("Transaction", () => {
           expect(errorMsg).toHaveBeenCalled();
         });
       });
+    });
+  });
+  describe("update()", () => {
+    let originalSignature, originalOuput, nextReceiver, nextAmount;
+    beforeEach(() => {
+      originalSignature = transaction.input.signature;
+      originalOuput = transaction.outputMap[senderWallet.publicKey];
+      nextReceiver = "nextvalidreceiver";
+      nextAmount = 45;
+
+      transaction.update({
+        senderWallet,
+        receiver: nextReceiver,
+        amount: nextAmount
+      });
+    });
+    it("should output the amount to next receiver", () => {
+      expect(transaction.outputMap[nextReceiver]).toEqual(nextAmount);
+    });
+    it("should substract the amount from sender output amount", () => {
+      expect(transaction.outputMap[senderWallet.publicKey]).toEqual(
+        originalOuput - nextAmount
+      );
+    });
+    it("should maintain total ouput that matches the input amount", () => {
+      expect(
+        Object.values(transaction.outputMap).reduce(
+          (total, outputAmount) => total + outputAmount
+        )
+      ).toEqual(transaction.input.amount);
+    });
+    it("should resign transaction", () => {
+      expect(transaction.input.signature).not.toEqual(originalSignature);
     });
   });
 });

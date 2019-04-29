@@ -24,6 +24,7 @@ class Transaction {
       signature: senderWallet.sign(outputMap)
     };
   }
+
   static validateTransaction(transaction) {
     const { input, outputMap } = transaction;
     const { address, amount, signature } = input;
@@ -41,6 +42,16 @@ class Transaction {
       return false;
     }
     return true;
+  }
+  update({ senderWallet, receiver, amount }) {
+    //Assign amount to receiver
+    this.outputMap[receiver] = amount;
+    // Take amount from sender wallet
+    this.outputMap[senderWallet.publicKey] =
+      this.outputMap[senderWallet.publicKey] - amount;
+
+    // New input for transaction
+    this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
   }
 }
 
