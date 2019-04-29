@@ -9,16 +9,18 @@ class Block {
     this.lastHash = lastHash;
     this.hash = hash;
     this.data = data;
+    //For proof of work
     this.nonce = nonce;
     this.difficulty = difficulty;
   }
 
   // Static methods to create
   // instance of a class without using contructor
+  //Creating genesis block of blockchain
   static generateGenesis() {
     return new this(GENESIS_BLOCK_DATA);
   }
-
+  //Mining out block using Proof of work consensus
   static mineBlock({ lastBlock, data }) {
     const lastHash = lastBlock.hash;
 
@@ -49,6 +51,7 @@ class Block {
   }
 
   // Regulating the difficulty by counting timestamp
+  // to secure system from 51% attacks
   static regulateDifficulty({ originalBlock, timestamp }) {
     const { difficulty } = originalBlock;
     const difference = timestamp - originalBlock.timestamp;
