@@ -44,8 +44,20 @@ class Transaction {
     return true;
   }
   update({ senderWallet, receiver, amount }) {
-    //Assign amount to receiver
-    this.outputMap[receiver] = amount;
+    // checking for amount not to be greater than user have
+    if (amount > this.outputMap[senderWallet.publicKey]) {
+      throw new Error("Amount exceeds the balance of the wallet");
+    }
+    //If receiver doesn't already exist in transaction
+    if (!this.outputMap[receiver]) {
+      //Assign amount to receiver
+      this.outputMap[receiver] = amount;
+    }
+    //if receiver already exists in transaction
+    else {
+      this.outputMap[receiver] = this.outputMap[receiver] + amount;
+    }
+
     // Take amount from sender wallet
     this.outputMap[senderWallet.publicKey] =
       this.outputMap[senderWallet.publicKey] - amount;
