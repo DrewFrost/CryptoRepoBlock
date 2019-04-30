@@ -12,7 +12,7 @@ const Miner = require("./src/miner");
 const isDevelopment = process.env.ENV === "development";
 const REDIS_URL = isDevelopment
   ? "redis://127.0.0.1:6379"
-  : "redis://h:p9a02ff2e1345ff60a4a6e3033a3b074815a8aca88126a576472994dfffc17f90@ec2-3-208-187-211.compute-1.amazonaws.com:19699";
+  : "redis://h:pd725d1c64913dcec1f259b4faf14d1dd3f5b29fc051386d69117274736d8c5ba@ec2-3-92-100-235.compute-1.amazonaws.com:32089";
 const DEFAULT_PORT = 3000;
 const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 
