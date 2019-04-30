@@ -14,7 +14,9 @@ const REDIS_URL = isDevelopment
   ? "redis://127.0.0.1:6379"
   : "redis://h:p9a02ff2e1345ff60a4a6e3033a3b074815a8aca88126a576472994dfffc17f90@ec2-3-208-187-211.compute-1.amazonaws.com:19699";
 const DEFAULT_PORT = 3000;
-const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
+const ROOT_NODE_ADDRESS = isDevelopment
+  ? `http://localhost:${DEFAULT_PORT}`
+  : `https://whispering-river-66845.herokuapp.com`;
 
 const app = express();
 const blockchain = new Blockchain();
