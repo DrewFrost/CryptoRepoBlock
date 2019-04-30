@@ -15,7 +15,7 @@ class Miner {
 
     //Miners reward
     validTransactions.push(
-      Transaction.rewardTransaction({ minerWallet: this.mineTransactions })
+      Transaction.rewardTransaction({ minerWallet: this.wallet})
     );
 
     //Add block with mined transactions to blockchain

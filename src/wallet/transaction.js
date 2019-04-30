@@ -57,6 +57,13 @@ class Transaction {
       outputMap: { [minerWallet.publicKey]: MINING_REWARD }
     });
   }
+  static rewardTransaction({ minerWallet }) {
+    return new this({
+      input: REWARD_INPUT,
+      outputMap: { [minerWallet.publicKey]: MINING_REWARD }
+    });
+  }
+  
   update({ senderWallet, receiver, amount }) {
     // checking for amount not to be greater than user have
     if (amount > this.outputMap[senderWallet.publicKey]) {
