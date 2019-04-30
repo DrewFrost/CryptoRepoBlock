@@ -30,6 +30,26 @@ app.get("/api/blocks", (req, res) => {
   res.json(blockchain.chain);
 });
 
+app.get("/api/blocks/length", (req, res) => {
+  res.json(blockchain.chain.length);
+});
+
+app.get("/api/blocks/:id", (req, res) => {
+  const { id } = req.params;
+  const { length } = blockchain.chain;
+
+  const reversedBlocks = blockchain.chain.slice().reverse();
+
+  let startIndex = (id - 1) * 5;
+  let endIndex = id * 5;
+
+  startIndex = startIndex < length ? startIndex : length;
+  endIndex = endIndex < length ? endIndex : length;
+
+  res.json(reversedBlocks.slice(startIndex, endIndex));
+
+});
+
 //mining blocks to the blockchain
 app.post("/api/mine", (req, res) => {
   const { data } = req.body;
@@ -83,6 +103,19 @@ app.get("/api/wallet-info", (req, res) => {
       address
     })
   });
+});
+
+app.get("/api/known-addresses", (req, res) => {
+  const addressMap = {};
+
+  for (let block of blockchain.chain) {
+    for (let transaction of block.data) {
+      const receiver = Object.keys(transaction.outputMap);
+
+      receiver.forEach(receiver => (addressMap[receiver] = receiver));
+    }
+  }
+  res.json(Object.keys(addressMap));
 });
 
 app.get("*", (req, res) => {
@@ -148,7 +181,7 @@ if (isDevelopment) {
       amount: 15
     });
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     if (i % 3 === 0) {
       walletAction();
       walletOneAction();

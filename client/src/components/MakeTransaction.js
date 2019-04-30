@@ -3,7 +3,14 @@ import { FormGroup, FormControl, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import history from "../history";
 class MakeTransaction extends Component {
-  state = { receiver: "", amount: 0 };
+  state = { receiver: "", amount: 0, knownAddresses: [] };
+
+  componentDidMount() {
+    fetch(`${document.location.origin}/api/known-addresses`)
+      .then(response => response.json())
+      .then(json => this.setState({ knownAddresses: json }));
+  }
+
   updateReceiver = event => {
     this.setState({ receiver: event.target.value });
   };
@@ -27,9 +34,22 @@ class MakeTransaction extends Component {
   render() {
     return (
       <div className="MakeTransaction">
-        <div><Link to="/">Home</Link></div>
-        <div><Link to="/transaction-pool">Transaction Pool</Link></div>
+        <div>
+          <Link to="/">Home</Link>
+        </div>
+        <div>
+          <Link to="/transaction-pool">Transaction Pool</Link>
+        </div>
         <h3>Make a Transaction</h3>
+        <h4>Known Addresses:</h4>
+        {this.state.knownAddresses.map(knownAddress => {
+          return (
+            <div key={knownAddress}>
+              <div>{knownAddress}</div>
+              <br />
+            </div>
+          );
+        })}{" "}
         <FormGroup>
           <FormControl
             input="text"
