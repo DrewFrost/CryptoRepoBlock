@@ -14,7 +14,9 @@ const REDIS_URL = isDevelopment
   ? "redis://127.0.0.1:6379"
   : "redis://h:pd725d1c64913dcec1f259b4faf14d1dd3f5b29fc051386d69117274736d8c5ba@ec2-3-92-100-235.compute-1.amazonaws.com:32089";
 const DEFAULT_PORT = 3000;
-const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
+const ROOT_NODE_ADDRESS = isDevelopment?
+`http://localhost:${DEFAULT_PORT}`
+:`https://radiant-oasis-26933.herokuapp.com`;
 
 const app = express();
 const blockchain = new Blockchain();
