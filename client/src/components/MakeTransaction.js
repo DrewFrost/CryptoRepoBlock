@@ -27,7 +27,8 @@ class MakeTransaction extends Component {
   render() {
     return (
       <div className="MakeTransaction">
-        <Link to="/">Home</Link>
+        <div><Link to="/">Home</Link></div>
+        <div><Link to="/transaction-pool">Transaction Pool</Link></div>
         <h3>Make a Transaction</h3>
         <FormGroup>
           <FormControl

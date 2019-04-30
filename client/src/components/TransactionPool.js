@@ -16,17 +16,18 @@ class TransactionPool extends Component {
       .then(json => this.setState({ transactionPoolMap: json }));
   };
 
-  fetchMineTransactions = () =>{
-      fetch(`${document.location.origin}/api/mine-transactions`)
-      .then(response => {
-          if(response.status === 200 ){
-              alert("Success");
-              history.push("/blocks")
-          }else{
-              alert("Mine transactions didn't compelete")
-          }
-      })
-  }
+  fetchMineTransactions = () => {
+    fetch(`${document.location.origin}/api/mine-transactions`).then(
+      response => {
+        if (response.status === 200) {
+          alert("Success");
+          history.push("/blocks");
+        } else {
+          alert("Mine transactions didn't compelete");
+        }
+      }
+    );
+  };
 
   componentDidMount() {
     this.fetchTransactionPoolMap();
@@ -46,6 +47,10 @@ class TransactionPool extends Component {
         <div>
           <Link to="/">Home</Link>
         </div>
+        <div>
+          <Link to="/blocks">Blocks</Link>
+        </div>
+        <div><Link to="/make-transaction">Make a Transaction</Link></div>
         <h3>Transaction Pool</h3>
         {Object.values(this.state.transactionPoolMap).map(transaction => {
           return (
@@ -55,8 +60,10 @@ class TransactionPool extends Component {
             </div>
           );
         })}
-        <hr/>
-        <Button variant="dark" onClick={this.fetchMineTransactions}>Mine the Transactions</Button>
+        <hr />
+        <Button variant="dark" onClick={this.fetchMineTransactions}>
+          Mine the Transactions
+        </Button>
       </div>
     );
   }

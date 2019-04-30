@@ -21,7 +21,7 @@ export default class App extends Component {
         <div><Link to="/make-transaction">Make a Transaction</Link></div>
         <div><Link to="/transaction-pool">Transaction Pool</Link></div>
         <div className="WalletInfo">
-          <div>Address: {address}</div>
+          <div>Your Address: {address}</div>
           <div>Balance: {balance}</div>
         </div>
       </div>
